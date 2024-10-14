@@ -50,7 +50,7 @@ namespace Text_Adventure
                 "Press any key to skip text, but whenever it says 'scene' you can't skip");
             
             Console.ReadKey(true);
-            /*
+            
             string shirtColor; //the color of the shirt is strictly for fun
             int shirtNum; //will decide the code needed to open the cabin door
 
@@ -177,16 +177,16 @@ namespace Text_Adventure
             
             colorWhite();
             Console.WriteLine("But a choice had to be made, preferably now.");
-            */
+            
             colorRed();
             Console.WriteLine("Where should you go? Type the letter of choice you make(capitalize)\n " +
                 "A) back to base | B) search for suspect | C) wander around aimlessly | D) yell");
             colorGray();
-
+            
 
             // asks the user which of the 4 things will they do
             // back to base, search for suspect, wander around, yell
-            whereToGo();
+            whereToGo(shirtNum);
 
             Console.ReadKey(true);
         }
@@ -214,7 +214,7 @@ namespace Text_Adventure
             Console.ForegroundColor = ConsoleColor.Blue;
         }
 
-        static void whereToGo()
+        static void whereToGo(int correct)
         {
             char choice = Console.ReadKey(true).KeyChar;
 
@@ -264,49 +264,100 @@ namespace Text_Adventure
                 Console.ReadKey(true);
 
                 Console.WriteLine("You start moving closer to it, and then you hear a peculiar sound");
+                Console.ReadKey(true);
 
                 bool insideCabin = false;
+                
+                CancellationTokenSource source = new();
+                CancellationToken token = source.Token;
 
-                for (int boo = 7; insideCabin == false;)
+                CancellationTokenSource source2 = new();
+                CancellationToken token2 = source2.Token;
+
+                ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    Console.Beep(500, 900);
-                    Console.Beep(500, 400);
-                    Console.Beep(500, 900);
-                    Console.Beep(500, 400);
-                    Thread.Sleep(900);
+                    source.Cancel();
+                    source2.Cancel();
+                }, token);
 
-                    Console.Beep(500, 900);
-                    Console.Beep(500, 900);
-                    Console.Beep(500, 900);
-                    Thread.Sleep(900);
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
+                    for (int boo = 1; insideCabin == false; boo++)
+                    {
+                        Console.Beep(500, 900);
+                        Console.Beep(500, 400);
+                        Console.Beep(500, 900);
+                        Console.Beep(500, 400);
+                        Thread.Sleep(900);
 
-                    Console.Beep(500, 400);
-                    Console.Beep(500, 900);
-                    Console.Beep(500, 900);
-                    Thread.Sleep(900);
+                        Console.Beep(500, 900);
+                        Console.Beep(500, 900);
+                        Console.Beep(500, 900);
+                        Thread.Sleep(900);
 
-                    Console.Beep(500, 400);
-                    Console.Beep(500, 900);
-                    Thread.Sleep(900);
+                        Console.Beep(500, 400);
+                        Console.Beep(500, 900);
+                        Console.Beep(500, 900);
+                        Thread.Sleep(900);
 
-                    Console.Beep(500, 400);
-                    Console.Beep(500, 900);
-                    Console.Beep(500, 400);
-                    Thread.Sleep(900);
+                        Console.Beep(500, 400);
+                        Console.Beep(500, 900);
+                        Thread.Sleep(900);
 
-                    Console.Beep(500, 900);
-                    Console.Beep(500, 400);
-                    Console.Beep(500, 400);
-                    Thread.Sleep(4000);
+                        Console.Beep(500, 400);
+                        Console.Beep(500, 900);
+                        Console.Beep(500, 400);
+                        Thread.Sleep(900);
 
-                }
+                        Console.Beep(500, 900);
+                        Console.Beep(500, 400);
+                        Console.Beep(500, 400);
+                        Thread.Sleep(4000);
+                    }
 
+                }, token2);
 
+                colorWhite();
+                Console.WriteLine("Some sort of beeping...");
+                Console.ReadKey(true);
 
-                Console.ReadKey();
+                colorGreen();
+                Console.WriteLine("*Sigh*");
+                Console.ReadKey(true);
+
+                colorGray();
+                Console.WriteLine("Despite wanting that idea dead in your mind, you move closer to see whether you can get inside");
+                Console.ReadKey(true);
+
+                Console.WriteLine("As you step onto the porch, you hear it creak under your weight like a howl calling to the darkness for your soul.\n" +
+                    "You get up and to the door where you see a set of numbers written on it");
+                Console.ReadKey(true);
+
+                Console.WriteLine("Ignoring them you try and open the door, but it's locked.\n" +
+                    "In your exasperation you notice that numbers can be pressed");
+                Console.ReadKey(true); 
+
+                colorWhite();
+                Console.WriteLine("Maybe it needs a code... but that would be ridiculous");
+                Console.ReadKey(true);
+
+                colorGray();
+                Console.WriteLine("Nevertheless, you still decide to try it.\n" +
+                    "To your dissapointment, the beeping is definitely not the answer as you already figured out that the 'keypad' only takes 1-2 numbers as input");
+                Console.ReadKey(true);
+
+                colorRed();
+                Console.WriteLine("Type out the answer\n" +
+                    "To get a hint, type this: 'help'\n" +
+                    "To get the right answer, type this: 'answer' ");
+
+                Answer(correct);
+
+                colorBlue();
+                Console.WriteLine("Testing");
+                Console.ReadKey(true);
 
                 insideCabin = true;
-
             }
 
             else if (choice == 'B')
@@ -334,7 +385,35 @@ namespace Text_Adventure
             else
             {
                 Console.WriteLine("\nThat's not an option");
-                whereToGo();
+                whereToGo(correct);
+            }
+
+            static void Answer(int theAnswer)
+            {
+
+                string answer = Console.ReadLine();
+
+                if (answer == "help")
+                {
+                    Console.WriteLine("Remember the number on the suspect's shirt");
+                    Answer(theAnswer);
+                }
+                else if (answer == "answer")
+                {
+                    Console.WriteLine("The answer is: " + theAnswer);
+                    Answer(theAnswer);
+                }
+                else if (answer == theAnswer.ToString())
+                {
+                    Console.WriteLine("Correct!");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Wrong!\n" +
+                        "Type the correct answer");
+                    Answer(theAnswer);
+                }
             }
         }
     }
