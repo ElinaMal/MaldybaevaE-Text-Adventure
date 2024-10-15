@@ -21,11 +21,11 @@ namespace Text_Adventure
 
         enum Objects
         {
-            Gun,
+            gun,
             Knife,
-            Water,
+            water,
             Vest,
-            Paper,
+            paper,
             Files
         };
 
@@ -41,13 +41,13 @@ namespace Text_Adventure
                     damage = 5,
 
                 },
-                items = new string[] {Objects.Gun.ToString(), "", "", "", "", ""}
+                items = new string[] {Objects.gun.ToString(), "", "", "", "", ""}
             };
 
-
-            colorRed();
+            backColorPurple();
+            colorBlue();
             Console.WriteLine("Instructions: gray = narrator, white = thoughts, blue = officers, red = for user, green = talking\n" +
-                "Press any key to skip text, but whenever it says 'scene' you can't skip");
+                "Press any key to skip text, but whenever it says 'SCENE' you can't skip");
             
             Console.ReadKey(true);
             
@@ -55,6 +55,7 @@ namespace Text_Adventure
             int shirtNum; //will decide the code needed to open the cabin door
 
             colorGray();
+            backColorBlack();
             Console.WriteLine("Running through the forest has been a challenging task.\n" +
                 "The dense leaves and sticks of bushes keep getting in the way of the objective ahead");
 
@@ -78,9 +79,9 @@ namespace Text_Adventure
 
             if (shirtColor == "red")
             {
-
+                
             }
-            else if (shirtColor == "red")
+            else if (shirtColor == "green")
             {
 
             }
@@ -125,7 +126,7 @@ namespace Text_Adventure
             Console.ReadKey(true);
 
             //start scene
-            colorGray();
+            colorRed();
             Console.WriteLine("SCENE");
 
             colorGreen(); //green is the color of the main character
@@ -147,8 +148,8 @@ namespace Text_Adventure
             colorGray();
             Console.WriteLine("Everything was going well. Backup, " + character.name + " is on his tail, and the forest is fairly small.\n" +
                 "Nowhere to hide really.\n" +
-                "Until something weird started happening, something that " + character.name + " only just realized.\n" +
-                "The forest went quiet. There is nothing but his gasping breaths.");
+                "Until something weird started happening, something that he only just realized.\n" +
+                "The forest went quiet. There is nothing but " + character.name + "'s gasping breaths.");
 
             Thread.Sleep(11000);
 
@@ -159,16 +160,14 @@ namespace Text_Adventure
 
             colorGray();
             Console.WriteLine("But all that came through was a final beep, contact was lost.");
-            Console.Beep(800, 300);
+            Console.Beep(900, 300);
 
             //end the scene
-            Thread.Sleep(3000);
-            Console.Clear();
-
             colorRed();
-            Console.WriteLine("Press any key to continue");
-
-            Console.ReadKey(true);
+            Console.WriteLine("Press 'enter' to continue");
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.ReadLine();
+            Console.Clear();
 
             colorGreen();
             Console.WriteLine("Just great, awesome! I lost the suspect, and I don't have contact with the base!");
@@ -179,8 +178,9 @@ namespace Text_Adventure
             Console.WriteLine("But a choice had to be made, preferably now.");
             
             colorRed();
-            Console.WriteLine("Where should you go? Type the letter of choice you make(capitalize)\n " +
-                "A) back to base | B) search for suspect | C) wander around aimlessly | D) yell");
+            Console.WriteLine("Where should " + character.name + " go? Type the letter of choice you make(capitalize)\n " +
+                "A) back to base | B) search for suspect | C) wander around aimlessly | D) yell\n" +
+                "Warning: only answer A and D have completed/progressing stories");
             colorGray();
             
 
@@ -214,6 +214,16 @@ namespace Text_Adventure
             Console.ForegroundColor = ConsoleColor.Blue;
         }
 
+        static void backColorPurple()
+        {
+            Console.BackgroundColor = ConsoleColor.DarkMagenta;
+        }
+
+        static void backColorBlack()
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+        }
+
         static void whereToGo(int correct)
         {
             char choice = Console.ReadKey(true).KeyChar;
@@ -222,7 +232,7 @@ namespace Text_Adventure
             {
                 Character character = new()
                 {
-                    name = "Kyle",
+                    name = "User",
                     stats = new()
                     {
                         health = 20,
@@ -230,7 +240,7 @@ namespace Text_Adventure
                         damage = 5,
 
                     },
-                    items = new string[] { Objects.Gun.ToString(), "", "", "", "", "" }
+                    items = new string[] { Objects.gun.ToString(), "", "", "", "", "" }
                 };
 
                 Console.WriteLine("\nYou went back to try and leave the forest. There is no point in the mission with no contact to base");
@@ -342,8 +352,21 @@ namespace Text_Adventure
                 Console.ReadKey(true);
 
                 colorGray();
-                Console.WriteLine("Nevertheless, you still decide to try it.\n" +
-                    "To your dissapointment, the beeping is definitely not the answer as you already figured out that the 'keypad' only takes 1-2 numbers as input");
+                Console.WriteLine("Nevertheless, you still decide to try it.\n");
+
+                backColorPurple();
+                colorBlue();
+                Console.WriteLine("Ignore the beeping ");
+                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                Console.WriteLine("it's not going to give you the answer ");
+                Console.BackgroundColor = ConsoleColor.Red;
+                colorGreen();
+                Console.WriteLine("it's there for fun ");
+                Console.BackgroundColor = ConsoleColor.Green;
+                colorRed();
+                Console.WriteLine("the actual input is 1-2 numbers long");
+
                 Console.ReadKey(true);
 
                 colorRed();
@@ -353,11 +376,65 @@ namespace Text_Adventure
 
                 Answer(correct);
 
-                colorBlue();
-                Console.WriteLine("Testing");
+                Console.WriteLine("Press any key to continue");
                 Console.ReadKey(true);
 
                 insideCabin = true;
+
+                colorWhite();
+                Console.WriteLine("It worked... I can't believe it");
+                Console.ReadKey(true);
+
+                colorGray();
+                Console.WriteLine("You slowly open the door and enter the building.\n" +
+                    "With shadows lurking at every corner of your vision, you start feeling adrenaline pumping in your blood");
+                Console.ReadKey(true);
+
+                Console.WriteLine("You proceed further inside, thinking about how this is better than being alone in a forest full of carnivors.\n" +
+                    "But you notice something...");
+                Console.ReadKey(true);
+
+                colorWhite();
+                Console.WriteLine("The beeping, it stopped...");
+                Console.ReadKey(true);
+
+                colorGray();
+                Console.WriteLine("That sends your adrenaline running. 'Why did it stop?' you think. 'WHAT made it stop?'");
+                Console.ReadKey(true);
+
+                colorRed();
+                Console.WriteLine("SCENE");
+
+                colorGray();
+                Console.WriteLine("With your newfound anxiety, you keep walking forward");
+                Thread.Sleep(1500);
+
+                Console.WriteLine("Cobweds littering the building from inside out convince you that there hasn't been anyone here in years");
+                Thread.Sleep(2000);
+
+                Console.WriteLine("You managed to get to the middle of the cabin's first floor");
+                Thread.Sleep(1000);
+
+                Console.WriteLine("THUMP!");
+                Thread.Sleep(1500);
+
+                colorWhite();
+                Console.WriteLine("What was that?");
+                Thread.Sleep(1000);
+
+                colorGray();
+                Console.WriteLine("The sound came from the basement");
+                Thread.Sleep(1000);
+
+                Console.WriteLine("Press 'enter' to continue");
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.ReadLine();
+                Console.Clear();
+
+                Noise();
+                
+
+
             }
 
             else if (choice == 'B')
@@ -413,6 +490,20 @@ namespace Text_Adventure
                     Console.WriteLine("Wrong!\n" +
                         "Type the correct answer");
                     Answer(theAnswer);
+                }
+            }
+
+            static void Noise()
+            {
+                colorRed();
+                Console.WriteLine("Where should you go? Make a choice, fast\n" +
+                    "A) Basement | B) Leave | C) Hide");
+
+                char input = Console.ReadKey().KeyChar;
+
+                if (input == 'A')
+                {
+
                 }
             }
         }
