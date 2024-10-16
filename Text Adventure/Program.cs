@@ -124,7 +124,7 @@ namespace Text_Adventure
 
 
             Console.ReadKey(true);
-
+            
             //start scene
             colorRed();
             Console.WriteLine("SCENE");
@@ -161,6 +161,7 @@ namespace Text_Adventure
             colorGray();
             Console.WriteLine("But all that came through was a final beep, contact was lost.");
             Console.Beep(900, 300);
+            
 
             //end the scene
             colorRed();
@@ -242,7 +243,7 @@ namespace Text_Adventure
                     },
                     items = new string[] { Objects.gun.ToString(), "", "", "", "", "" }
                 };
-
+                
                 Console.WriteLine("\nYou went back to try and leave the forest. There is no point in the mission with no contact to base");
                 Console.ReadKey(true);
 
@@ -275,9 +276,10 @@ namespace Text_Adventure
 
                 Console.WriteLine("You start moving closer to it, and then you hear a peculiar sound");
                 Console.ReadKey(true);
+                
 
                 bool insideCabin = false;
-                
+
                 CancellationTokenSource source = new();
                 CancellationToken token = source.Token;
 
@@ -326,7 +328,7 @@ namespace Text_Adventure
                     }
 
                 }, token2);
-
+                
                 colorWhite();
                 Console.WriteLine("Some sort of beeping...");
                 Console.ReadKey(true);
@@ -334,7 +336,7 @@ namespace Text_Adventure
                 colorGreen();
                 Console.WriteLine("*Sigh*");
                 Console.ReadKey(true);
-
+                
                 colorGray();
                 Console.WriteLine("Despite wanting that idea dead in your mind, you move closer to see whether you can get inside");
                 Console.ReadKey(true);
@@ -350,10 +352,10 @@ namespace Text_Adventure
                 colorWhite();
                 Console.WriteLine("Maybe it needs a code... but that would be ridiculous");
                 Console.ReadKey(true);
-
+                
                 colorGray();
                 Console.WriteLine("Nevertheless, you still decide to try it.\n");
-
+                
                 backColorPurple();
                 colorBlue();
                 Console.WriteLine("Ignore the beeping ");
@@ -369,14 +371,43 @@ namespace Text_Adventure
 
                 Console.ReadKey(true);
 
-                colorRed();
+                backColorBlack();
                 Console.WriteLine("Type out the answer\n" +
                     "To get a hint, type this: 'help'\n" +
                     "To get the right answer, type this: 'answer' ");
+                
+                int fun = 5;
 
-                Answer(correct);
+                while (fun >= 5) 
+                {
+                    string answer = Console.ReadLine();
 
-                Console.WriteLine("Press any key to continue");
+                    if (answer == "help")
+                    {
+                        Console.WriteLine("Remember the number on the suspect's shirt");
+                        answer = string.Empty;
+                        continue;
+                    }
+                    else if (answer == "answer")
+                    {
+                        Console.WriteLine("The answer is: " + correct.ToString());
+                        answer = string.Empty;
+                        continue;
+                    }
+                    else if (answer == correct.ToString())
+                    {
+                        Console.WriteLine("Correct!");
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wrong! Type the correct answer");
+                        answer = string.Empty;
+                        continue;
+                    }
+                }
+
+                    Console.WriteLine("Press any key to continue");
                 Console.ReadKey(true);
 
                 insideCabin = true;
@@ -430,11 +461,7 @@ namespace Text_Adventure
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.ReadLine();
                 Console.Clear();
-
-                Noise();
-                
-
-
+                return;
             }
 
             else if (choice == 'B')
@@ -463,34 +490,6 @@ namespace Text_Adventure
             {
                 Console.WriteLine("\nThat's not an option");
                 whereToGo(correct);
-            }
-
-            static void Answer(int theAnswer)
-            {
-
-                string answer = Console.ReadLine();
-
-                if (answer == "help")
-                {
-                    Console.WriteLine("Remember the number on the suspect's shirt");
-                    Answer(theAnswer);
-                }
-                else if (answer == "answer")
-                {
-                    Console.WriteLine("The answer is: " + theAnswer);
-                    Answer(theAnswer);
-                }
-                else if (answer == theAnswer.ToString())
-                {
-                    Console.WriteLine("Correct!");
-                    return;
-                }
-                else
-                {
-                    Console.WriteLine("Wrong!\n" +
-                        "Type the correct answer");
-                    Answer(theAnswer);
-                }
             }
 
             static void Noise()
