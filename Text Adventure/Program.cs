@@ -11,14 +11,12 @@ namespace Text_Adventure
             public Stats stats;
             public string[] items;
         }
-
         struct Stats
         {
             public int health;
             public int defense;
             public int damage;
         }
-
         enum Objects
         {
             gun,
@@ -28,7 +26,6 @@ namespace Text_Adventure
             paper,
             Files
         };
-
         static void Main(string[] args)
         {
             Character character = new()
@@ -46,8 +43,8 @@ namespace Text_Adventure
 
             backColorPurple();
             colorBlue();
-            Console.WriteLine("Instructions: gray = narrator, white = thoughts, blue = officers, red = for user, green = talking\n" +
-                "Press any key to skip text, but whenever it says 'SCENE' you can't skip");
+            Console.WriteLine("Instructions: gray = narrator, white = character thoughts, blue = officers, red = for user, green = character talking\n" +
+                "Press any key to skip text, but whenever it says 'SCENE' you can't skip. Also, please use headphones");
             
             Console.ReadKey(true);
             
@@ -75,7 +72,7 @@ namespace Text_Adventure
             colorRed(); //red is the direction to the user
             Console.WriteLine("Choose the color of the shirt. Type EXACTLY what is written in the options\n" +
                 "red | green | light blue");
-            shirtColor = Console.ReadLine();
+            shirtColor = Console.ReadLine()!;
 
             if (shirtColor == "red")
             {
@@ -122,7 +119,6 @@ namespace Text_Adventure
                 shirtNum = 64;
             }
 
-
             Console.ReadKey(true);
             
             //start scene
@@ -162,7 +158,6 @@ namespace Text_Adventure
             Console.WriteLine("But all that came through was a final beep, contact was lost.");
             Console.Beep(900, 300);
             
-
             //end the scene
             colorRed();
             Console.WriteLine("Press 'enter' to continue");
@@ -184,11 +179,11 @@ namespace Text_Adventure
                 "Warning: only answer A and D have completed/progressing stories");
             colorGray();
             
-
             // asks the user which of the 4 things will they do
             // back to base, search for suspect, wander around, yell
             whereToGo(shirtNum);
 
+            Console.WriteLine("That's it, sorry got too ambitious and couldn't finish it");
             Console.ReadKey(true);
         }
 
@@ -277,22 +272,11 @@ namespace Text_Adventure
                 Console.WriteLine("You start moving closer to it, and then you hear a peculiar sound");
                 Console.ReadKey(true);
                 
-
                 bool insideCabin = false;
 
                 CancellationTokenSource source = new();
-                CancellationToken token = source.Token;
 
-                CancellationTokenSource source2 = new();
-                CancellationToken token2 = source2.Token;
-
-                ThreadPool.QueueUserWorkItem(_ =>
-                {
-                    source.Cancel();
-                    source2.Cancel();
-                }, token);
-
-                ThreadPool.QueueUserWorkItem(_ =>
+                ThreadPool.QueueUserWorkItem(obj =>
                 {
                     for (int boo = 1; insideCabin == false; boo++)
                     {
@@ -327,8 +311,8 @@ namespace Text_Adventure
                         Thread.Sleep(4000);
                     }
 
-                }, token2);
-                
+                }, source.Token);
+
                 colorWhite();
                 Console.WriteLine("Some sort of beeping...");
                 Console.ReadKey(true);
@@ -347,7 +331,7 @@ namespace Text_Adventure
 
                 Console.WriteLine("Ignoring them you try and open the door, but it's locked.\n" +
                     "In your exasperation you notice that numbers can be pressed");
-                Console.ReadKey(true); 
+                Console.ReadKey(true);
 
                 colorWhite();
                 Console.WriteLine("Maybe it needs a code... but that would be ridiculous");
@@ -378,9 +362,9 @@ namespace Text_Adventure
                 
                 int fun = 5;
 
-                while (fun >= 5) 
+                while (fun == 5)
                 {
-                    string answer = Console.ReadLine();
+                    string answer = Console.ReadLine()!;
 
                     if (answer == "help")
                     {
@@ -406,10 +390,10 @@ namespace Text_Adventure
                         continue;
                     }
                 }
-
-                    Console.WriteLine("Press any key to continue");
+                Console.WriteLine("Press any key to continue");
                 Console.ReadKey(true);
 
+                source.Cancel();
                 insideCabin = true;
 
                 colorWhite();
@@ -461,6 +445,43 @@ namespace Text_Adventure
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.ReadLine();
                 Console.Clear();
+
+                colorRed();
+                Console.WriteLine("Where should you go? Type out full answer! Make a choice, quick!\n" +
+                    "go down | leave the building | hide in the closet");
+
+                using CancellationTokenSource see = new();
+
+                
+                if (ThreadPool.QueueUserWorkItem(Death, see.Token))
+                {
+                    fun++;
+
+                    while (fun == 6)
+                    {
+                        string input = Console.ReadLine()!;
+
+                        if (input == "go down")
+                        {
+
+                        }
+                        else if (input == "leave the building")
+                        {
+
+                        }
+                        else if (input == "hide in the closet")
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                }
+
+                Console.WriteLine("Testing");
+                
                 return;
             }
 
@@ -492,18 +513,16 @@ namespace Text_Adventure
                 whereToGo(correct);
             }
 
-            static void Noise()
+            static void QuickAction()
             {
-                colorRed();
-                Console.WriteLine("Where should you go? Make a choice, fast\n" +
-                    "A) Basement | B) Leave | C) Hide");
 
-                char input = Console.ReadKey().KeyChar;
+            }
 
-                if (input == 'A')
-                {
+            static void Death(object? obj)
+            {
+                Thread.Sleep(5000);
 
-                }
+                Console.WriteLine("You Died");
             }
         }
     }
