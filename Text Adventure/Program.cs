@@ -1,10 +1,15 @@
 ﻿using Microsoft.VisualBasic;
+using System;
 using System.Drawing;
+using System.Runtime.Intrinsics.X86;
 
 namespace Text_Adventure
 {
     internal class Program
     {
+        static bool runThread = true;
+
+        static Action checkpoint;
         struct Character
         {
             public string name;
@@ -43,8 +48,9 @@ namespace Text_Adventure
 
             backColorPurple();
             colorBlue();
-            Console.WriteLine("Instructions: gray = narrator, white = character thoughts, blue = officers, red = for user, green = character talking\n" +
-                "Press any key to skip text, but whenever it says 'SCENE' you can't skip. Also, please use headphones");
+            Console.WriteLine("Infrmation: gray = narrator, white = character thoughts, blue = officers, red = for user, green = character talking.\n" +
+                "Press any key to skip text, but whenever it says 'SCENE' you can't skip. The game will also auto save at specific points in the game.\n" +
+                "Please use headphones, enjoy!");
             
             Console.ReadKey(true);
             
@@ -120,7 +126,7 @@ namespace Text_Adventure
             }
 
             Console.ReadKey(true);
-            
+            /*
             //start scene
             colorRed();
             Console.WriteLine("SCENE");
@@ -164,7 +170,7 @@ namespace Text_Adventure
             Console.ForegroundColor = ConsoleColor.Black;
             Console.ReadLine();
             Console.Clear();
-
+            */
             colorGreen();
             Console.WriteLine("Just great, awesome! I lost the suspect, and I don't have contact with the base!");
 
@@ -178,9 +184,7 @@ namespace Text_Adventure
                 "A) back to base | B) search for suspect | C) wander around aimlessly | D) yell\n" +
                 "Warning: only answer A and D have completed/progressing stories");
             colorGray();
-            
-            // asks the user which of the 4 things will they do
-            // back to base, search for suspect, wander around, yell
+
             whereToGo(shirtNum);
 
             Console.WriteLine("That's it, sorry got too ambitious and couldn't finish it");
@@ -316,7 +320,7 @@ namespace Text_Adventure
                 colorWhite();
                 Console.WriteLine("Some sort of beeping...");
                 Console.ReadKey(true);
-
+                /*
                 colorGreen();
                 Console.WriteLine("*Sigh*");
                 Console.ReadKey(true);
@@ -339,7 +343,7 @@ namespace Text_Adventure
                 
                 colorGray();
                 Console.WriteLine("Nevertheless, you still decide to try it.\n");
-                
+                */
                 backColorPurple();
                 colorBlue();
                 Console.WriteLine("Ignore the beeping ");
@@ -399,7 +403,7 @@ namespace Text_Adventure
                 colorWhite();
                 Console.WriteLine("It worked... I can't believe it");
                 Console.ReadKey(true);
-
+                /*
                 colorGray();
                 Console.WriteLine("You slowly open the door and enter the building.\n" +
                     "With shadows lurking at every corner of your vision, you start feeling adrenaline pumping in your blood");
@@ -436,7 +440,7 @@ namespace Text_Adventure
                 colorWhite();
                 Console.WriteLine("What was that?");
                 Thread.Sleep(1000);
-
+                */
                 colorGray();
                 Console.WriteLine("The sound came from the basement");
                 Thread.Sleep(1000);
@@ -446,41 +450,11 @@ namespace Text_Adventure
                 Console.ReadLine();
                 Console.Clear();
 
-                colorRed();
-                Console.WriteLine("Where should you go? Type out full answer! Make a choice, quick!\n" +
-                    "go down | leave the building | hide in the closet");
-
-                using CancellationTokenSource see = new();
-
+                checkpoint = QuickAction;
+                QuickAction();
                 
-                if (ThreadPool.QueueUserWorkItem(Death, see.Token))
-                {
-                    fun++;
-
-                    while (fun == 6)
-                    {
-                        string input = Console.ReadLine()!;
-
-                        if (input == "go down")
-                        {
-
-                        }
-                        else if (input == "leave the building")
-                        {
-
-                        }
-                        else if (input == "hide in the closet")
-                        {
-
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                }
-
                 Console.WriteLine("Testing");
+                Console.ReadLine();
                 
                 return;
             }
@@ -502,9 +476,10 @@ namespace Text_Adventure
                     "As soon as it's on top of you, you feel agonizing pain erupt in your stomach.\n" +
                     "Then, it turns dark and cold...");
                 colorGray();
-                Console.WriteLine("You died");
+                Console.WriteLine("You died\n" +
+                    "Press any key to try again");
                 Console.ReadKey(true);
-                Environment.Exit(0);
+                whereToGo(correct);
             }
 
             else
@@ -513,16 +488,67 @@ namespace Text_Adventure
                 whereToGo(correct);
             }
 
+            
             static void QuickAction()
             {
+                colorRed();
+                Console.WriteLine("Where should you go? Type out full answer! Make a choice, quick!\n" +
+                    "go down | leave the building | hide in the closet");
 
+
+                using CancellationTokenSource see = new();
+
+                int fun2 = 6;
+                runThread = true;
+
+                if (ThreadPool.QueueUserWorkItem(Death, see.Token))
+                {
+                    while (fun2 == 6)
+                    {
+                        string input = Console.ReadLine()!;
+
+                        if (input == "go down")
+                        {
+                            Console.WriteLine("You died");
+                            checkpoint();
+                        }
+                        else if (input == "leave the building")
+                        {
+                            break;
+                        }
+                        else if (input == "hide in the closet")
+                        {
+                            Console.WriteLine("You died");
+                            checkpoint();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Try again");
+                            continue;
+                        }
+                    }
+                }
+
+
+
+                see.Cancel();
+                runThread = false;
+                fun2 = 7;
+                Console.WriteLine("Threads are a pain");
+                Console.ReadKey(true);
+                return;
             }
 
             static void Death(object? obj)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(10000);
 
-                Console.WriteLine("You Died");
+                if (runThread)
+                {
+                    Console.WriteLine("You Died");
+                    Thread.Sleep(2000);
+                    checkpoint();
+                }
             }
         }
     }
