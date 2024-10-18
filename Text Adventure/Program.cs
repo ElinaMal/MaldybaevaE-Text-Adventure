@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Intrinsics.X86;
 
@@ -8,6 +9,7 @@ namespace Text_Adventure
     internal class Program
     {
         static bool runThread = true;
+        static int fun2 = 6;
 
         static Action checkpoint;
         struct Character
@@ -314,7 +316,6 @@ namespace Text_Adventure
                         Console.Beep(500, 400);
                         Thread.Sleep(4000);
                     }
-
                 }, source.Token);
 
                 colorWhite();
@@ -397,7 +398,6 @@ namespace Text_Adventure
                 Console.WriteLine("Press any key to continue");
                 Console.ReadKey(true);
 
-                source.Cancel();
                 insideCabin = true;
 
                 colorWhite();
@@ -452,8 +452,57 @@ namespace Text_Adventure
 
                 checkpoint = QuickAction;
                 QuickAction();
-                
-                Console.WriteLine("Testing");
+
+                Console.WriteLine("SCENE");
+                colorGray();
+                Console.WriteLine("You didn't think much before you ran right for the door, practically breaking it off its hinges, and getting as far away from the house as possible");
+                Thread.Sleep(3500);
+                Console.WriteLine("By the time you stopped running you were so far away that you weren't at all aware of where you are,\n" +
+                    "especially with how dark it was outside. That is until...");
+                Thread.Sleep(3000);
+                insideCabin = false;
+                Console.WriteLine("Turns out, you didn't get far from the cabin");
+                Thread.Sleep(1500);
+                colorGreen();
+                Console.WriteLine("'This can't be... no... but I...'");
+                Thread.Sleep(1500);
+                colorGray();
+                Console.WriteLine("At a complete loss of words, you aren't even sure you are even here anymore");
+
+                colorRed();
+                Console.WriteLine("Make a choice\n" +
+                    "run | stay");
+
+                fun++;
+                while (fun == 6)
+                {
+                    string answer = Console.ReadLine()!;
+
+                    if (answer == "help")
+                    {
+                        Console.WriteLine("Remember the number on the suspect's shirt");
+                        answer = string.Empty;
+                        continue;
+                    }
+                    else if (answer == "answer")
+                    {
+                        Console.WriteLine("The answer is: " + correct.ToString());
+                        answer = string.Empty;
+                        continue;
+                    }
+                    else if (answer == correct.ToString())
+                    {
+                        Console.WriteLine("Correct!");
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wrong! Type the correct answer");
+                        answer = string.Empty;
+                        continue;
+                    }
+                }
+
                 Console.ReadLine();
                 
                 return;
@@ -491,14 +540,15 @@ namespace Text_Adventure
             
             static void QuickAction()
             {
+                Thread.Sleep(1000);
                 colorRed();
                 Console.WriteLine("Where should you go? Type out full answer! Make a choice, quick!\n" +
-                    "go down | leave the building | hide in the closet");
+                    "run and hide downstairs | run and leave the building | hide in the closest closet");
 
 
                 using CancellationTokenSource see = new();
 
-                int fun2 = 6;
+                fun2 = 6;
                 runThread = true;
 
                 if (ThreadPool.QueueUserWorkItem(Death, see.Token))
@@ -507,18 +557,61 @@ namespace Text_Adventure
                     {
                         string input = Console.ReadLine()!;
 
-                        if (input == "go down")
+                        if (input == "run and hide downstairs")
                         {
-                            Console.WriteLine("You died");
+                            runThread = false;
+                            fun2 = 7;
+                            colorRed();
+                            Console.WriteLine("SCENE");
+                            colorGray();
+                            Console.WriteLine("You ran to the closest room in site which was the basement");
+                            colorWhite();
+                            Console.WriteLine("'Should have ran upstairs'");
+                            Thread.Sleep(3000);
+                            colorGray();
+                            Console.WriteLine("When you get inside the basement, something dawns on you");
+                            Thread.Sleep(1500);
+                            colorWhite();
+                            Console.WriteLine("The sound came from downstairs");
+                            Thread.Sleep(1500);
+                            colorGray();
+                            Console.WriteLine("That was all you thought before getting tackled and with your stomach erupting in pain");
+                            colorRed();
+                            Console.WriteLine("Press any key to retry");
+                            Console.ReadKey(true);
+                            see.Cancel();
                             checkpoint();
                         }
-                        else if (input == "leave the building")
+                        else if (input == "run and leave the building")
                         {
                             break;
                         }
-                        else if (input == "hide in the closet")
+                        else if (input == "hide in the closest closet")
                         {
-                            Console.WriteLine("You died");
+                            runThread = false;
+                            fun2 = 7;
+                            colorRed();
+                            Console.WriteLine("SCENE");
+                            colorGray();
+                            Console.WriteLine("You managed to scramble yourself to the nearest open closet. Shaking with fear, you stay quiet and listen");
+                            Thread.Sleep(3000);
+                            Console.WriteLine("You hear thumping sounds moving from side to side as that creature is wondering where its prey is");
+                            Thread.Sleep(3000);
+                            Console.WriteLine("You believe that it's human, yet not human at all. Then, with your barely contained ragged breath,\n" +
+                                "you froze in place when you realized that 'it' is right outside the closet");
+                            Thread.Sleep(4000);
+                            Console.WriteLine("You hope to whoever is in charge of this world that this is not the end, not yet");
+                            Thread.Sleep(2000);
+                            Console.WriteLine("And it's like a prayers were answered as the steps echoed away from the closet");
+                            Thread.Sleep(2000);
+                            Console.WriteLine("That is, until you breathed out");
+                            Thread.Sleep(1000);
+                            Console.WriteLine("That 'thing' heard you, you haven't yet even processed it when 'it' had already burst through the closet door\n" +
+                                "Stabbing you in the gut, resutign in your demise");
+                            colorRed();
+                            Console.WriteLine("Press any key to retry");
+                            Console.ReadKey(true);
+                            see.Cancel();
                             checkpoint();
                         }
                         else
@@ -529,24 +622,26 @@ namespace Text_Adventure
                     }
                 }
 
-
-
                 see.Cancel();
                 runThread = false;
                 fun2 = 7;
-                Console.WriteLine("Threads are a pain");
+                colorRed();
+                Console.WriteLine("Press any key to retry");
                 Console.ReadKey(true);
                 return;
             }
 
             static void Death(object? obj)
             {
-                Thread.Sleep(10000);
+                Thread.Sleep(12000);
 
                 if (runThread)
                 {
-                    Console.WriteLine("You Died");
-                    Thread.Sleep(2000);
+                    fun2 = 7;
+                    colorGray();
+                    Console.WriteLine("You weren't quick enough, the 'thump' had now turned into a creature. Jumping out at you, stabbing you until you bleed to death");
+                    Console.WriteLine("Restarting...");
+                    Thread.Sleep(3000);
                     checkpoint();
                 }
             }
