@@ -34,7 +34,7 @@ namespace Text_Adventure
             Files
         };
         static void Main(string[] args)
-        {
+        { 
             Character character = new()
             {
                 name = "Kyle",
@@ -374,13 +374,11 @@ namespace Text_Adventure
                     if (answer == "help")
                     {
                         Console.WriteLine("Remember the number on the suspect's shirt");
-                        answer = string.Empty;
                         continue;
                     }
                     else if (answer == "answer")
                     {
                         Console.WriteLine("The answer is: " + correct.ToString());
-                        answer = string.Empty;
                         continue;
                     }
                     else if (answer == correct.ToString())
@@ -391,7 +389,6 @@ namespace Text_Adventure
                     else
                     {
                         Console.WriteLine("Wrong! Type the correct answer");
-                        answer = string.Empty;
                         continue;
                     }
                 }
@@ -457,51 +454,56 @@ namespace Text_Adventure
                 colorGray();
                 Console.WriteLine("You didn't think much before you ran right for the door, practically breaking it off its hinges, and getting as far away from the house as possible");
                 Thread.Sleep(3500);
+
                 Console.WriteLine("By the time you stopped running you were so far away that you weren't at all aware of where you are,\n" +
                     "especially with how dark it was outside. That is until...");
                 Thread.Sleep(3000);
+
                 insideCabin = false;
+
                 Console.WriteLine("Turns out, you didn't get far from the cabin");
                 Thread.Sleep(1500);
+
                 colorGreen();
                 Console.WriteLine("'This can't be... no... but I...'");
                 Thread.Sleep(1500);
+
                 colorGray();
-                Console.WriteLine("At a complete loss of words, you aren't even sure you are even here anymore");
+                Console.WriteLine("At a complete loss of words, you aren't sure you are even here anymore");
+
+                Console.ReadKey(true);
+                Console.Clear();
+
+                checkpoint = endingA;
+                endingA();
+
 
                 colorRed();
-                Console.WriteLine("Make a choice\n" +
-                    "run | stay");
+                Console.WriteLine("SCENE");
+                colorGray();
+                Console.WriteLine("You chose to run");
+                Thread.Sleep(1000);
+                insideCabin = true;
+                Console.WriteLine("Run... run... run...");
+                Thread.Sleep(2000);
+                Console.WriteLine("This time you don't want to stop until you are truly free from this crazed nightmare");
+                Thread.Sleep(2000);
+                colorBlue();
+                Console.WriteLine("Officer!");
+                colorWhite();
+                Console.WriteLine("What?");
+                Thread.Sleep(1000);
+                colorBlue();
+                Console.WriteLine(character.name + "answer! This is base, where are you?");
+                Thread.Sleep(1500);
+                colorGreen();
+                Console.WriteLine("I'm here... I'M HERE!");
+                Thread.Sleep(1000);
+                colorGray();
+                Console.WriteLine("In the end, you were found and got to go home. The sus"
 
-                fun++;
-                while (fun == 6)
-                {
-                    string answer = Console.ReadLine()!;
 
-                    if (answer == "help")
-                    {
-                        Console.WriteLine("Remember the number on the suspect's shirt");
-                        answer = string.Empty;
-                        continue;
-                    }
-                    else if (answer == "answer")
-                    {
-                        Console.WriteLine("The answer is: " + correct.ToString());
-                        answer = string.Empty;
-                        continue;
-                    }
-                    else if (answer == correct.ToString())
-                    {
-                        Console.WriteLine("Correct!");
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Wrong! Type the correct answer");
-                        answer = string.Empty;
-                        continue;
-                    }
-                }
+
 
                 Console.ReadLine();
                 
@@ -633,7 +635,7 @@ namespace Text_Adventure
 
             static void Death(object? obj)
             {
-                Thread.Sleep(12000);
+                Thread.Sleep(10000);
 
                 if (runThread)
                 {
@@ -643,6 +645,56 @@ namespace Text_Adventure
                     Console.WriteLine("Restarting...");
                     Thread.Sleep(3000);
                     checkpoint();
+                }
+            }
+
+            static void endingA()
+            {
+                Thread.Sleep(1000);
+                colorRed();
+                Console.WriteLine("Make a choice\n" +
+                    "run | stay");
+
+                fun2++;
+                while (fun2 == 8)
+                {
+                    string answer2 = Console.ReadLine()!;
+
+                    if (answer2 == "run")
+                    {
+                        break;
+                    }
+                    else if (answer2 == "stay")
+                    {
+                        colorRed();
+                        Console.WriteLine("SCENE");
+                        colorGray();
+                        Console.WriteLine("Despite the fear, you choose to stay");
+                        Thread.Sleep(1500);
+                        Console.WriteLine("The beeping keeps going, playing over and over");
+                        Thread.Sleep(1500);
+                        Console.WriteLine("Slowly it becomes... familiar");
+                        Thread.Sleep(1500);
+                        Console.WriteLine("Comforting");
+                        Thread.Sleep(5000);
+                        Console.WriteLine("You stay, wanting that beeping to keep going. Which is why when it had stopped...");
+                        Thread.Sleep(1000);
+                        colorBlue();
+                        Console.WriteLine("Officer?");
+                        colorGray();
+                        Console.WriteLine("...you wished upon the death of one who was previously close");
+                        colorRed();
+                        Console.WriteLine("Press any key to try again, there is a better ending");
+                        Console.ReadKey(true);
+                        checkpoint();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Try again");
+                        continue;
+                    }
+
+                    return;
                 }
             }
         }
