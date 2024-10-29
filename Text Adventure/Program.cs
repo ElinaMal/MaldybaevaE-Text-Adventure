@@ -128,7 +128,7 @@ namespace Text_Adventure
             }
 
             Console.ReadKey(true);
-            /*
+            
             //start scene
             colorRed();
             Console.WriteLine("SCENE");
@@ -172,7 +172,7 @@ namespace Text_Adventure
             Console.ForegroundColor = ConsoleColor.Black;
             Console.ReadLine();
             Console.Clear();
-            */
+            
             colorGreen();
             Console.WriteLine("Just great, awesome! I lost the suspect, and I don't have contact with the base!");
 
@@ -189,8 +189,11 @@ namespace Text_Adventure
 
             whereToGo(shirtNum);
 
-            Console.WriteLine("That's it, sorry got too ambitious and couldn't finish it");
+            Console.Clear();
+            colorRed();
+            Console.WriteLine("Press any key to exit");
             Console.ReadKey(true);
+            Environment.Exit(0);
         }
 
         static void colorWhite()
@@ -321,7 +324,7 @@ namespace Text_Adventure
                 colorWhite();
                 Console.WriteLine("Some sort of beeping...");
                 Console.ReadKey(true);
-                /*
+                
                 colorGreen();
                 Console.WriteLine("*Sigh*");
                 Console.ReadKey(true);
@@ -344,7 +347,7 @@ namespace Text_Adventure
                 
                 colorGray();
                 Console.WriteLine("Nevertheless, you still decide to try it.\n");
-                */
+                
                 backColorPurple();
                 colorBlue();
                 Console.WriteLine("Ignore the beeping ");
@@ -400,7 +403,7 @@ namespace Text_Adventure
                 colorWhite();
                 Console.WriteLine("It worked... I can't believe it");
                 Console.ReadKey(true);
-                /*
+                
                 colorGray();
                 Console.WriteLine("You slowly open the door and enter the building.\n" +
                     "With shadows lurking at every corner of your vision, you start feeling adrenaline pumping in your blood");
@@ -437,7 +440,7 @@ namespace Text_Adventure
                 colorWhite();
                 Console.WriteLine("What was that?");
                 Thread.Sleep(1000);
-                */
+                
                 colorGray();
                 Console.WriteLine("The sound came from the basement");
                 Thread.Sleep(1000);
@@ -500,13 +503,13 @@ namespace Text_Adventure
                 Console.WriteLine("I'm here... I'M HERE!");
                 Thread.Sleep(1000);
                 colorGray();
-                Console.WriteLine("In the end, you were found and got to go home. The sus"
-
-
-
-
-                Console.ReadLine();
-                
+                Console.WriteLine("In the end, you were found and got to go home.\n" +
+                    "The suspect was still somewhere out in the woods, but you don't care about that.\n" +
+                    "You just want to go home and forget about everything that took place here.");
+                Thread.Sleep(5000);
+                colorRed();
+                Console.WriteLine("Press any key");
+                Console.ReadKey();
                 return;
             }
 
@@ -557,7 +560,7 @@ namespace Text_Adventure
                 {
                     while (fun2 == 6)
                     {
-                        string input = Console.ReadLine()!;
+                        string input = Console.ReadLine();
 
                         if (input == "run and hide downstairs")
                         {
@@ -586,6 +589,12 @@ namespace Text_Adventure
                         }
                         else if (input == "run and leave the building")
                         {
+                            see.Cancel();
+                            runThread = false;
+                            fun2 = 7;
+                            colorRed();
+                            Console.WriteLine("Press any key to continue");
+                            Console.ReadKey(true);
                             break;
                         }
                         else if (input == "hide in the closest closet")
@@ -624,12 +633,6 @@ namespace Text_Adventure
                     }
                 }
 
-                see.Cancel();
-                runThread = false;
-                fun2 = 7;
-                colorRed();
-                Console.WriteLine("Press any key to retry");
-                Console.ReadKey(true);
                 return;
             }
 
@@ -641,9 +644,10 @@ namespace Text_Adventure
                 {
                     fun2 = 7;
                     colorGray();
-                    Console.WriteLine("You weren't quick enough, the 'thump' had now turned into a creature. Jumping out at you, stabbing you until you bleed to death");
+                    Console.WriteLine("You weren't quick enough, the 'thump' had now turned into a creature.\n" +
+                        "Jumping out at you, stabbing you until you bleed to death");
                     Console.WriteLine("Restarting...");
-                    Thread.Sleep(3000);
+                    Thread.Sleep(5000);
                     checkpoint();
                 }
             }
@@ -658,7 +662,7 @@ namespace Text_Adventure
                 fun2++;
                 while (fun2 == 8)
                 {
-                    string answer2 = Console.ReadLine()!;
+                    string answer2 = Console.ReadLine();
 
                     if (answer2 == "run")
                     {
